@@ -1,20 +1,59 @@
 Template.spreadsheet.rendered = function() {
+  console.log("rendered")
+  var spreadsheetObject = this.data;
+  var spreadjs;
 
+  $("#grid").css({
+    height: 400,
+    width: '100%'
+  }).wijspread({
+    sheetCount: 1
+  });
+
+  $(window).resize(function() {
     $("#grid").css({
-        height: 400,
-        width: '100%'
-    }).wijspread({
-        sheetCount: 1
+      height: '100%',
+      width: '100%'
     });
+  });
 
-    $(window).resize(function() {
-        $("#grid").css({
-            height: '100%',
-            width: '100%'
-        });
-    });
-
-  var spreadjs = $("#grid").wijspread("spread");
+  spreadjs = $("#grid").wijspread("spread");
   spreadjs.useWijmoTheme = true;
   spreadjs.repaint();
+
+  if (spreadsheetObject.data) {
+    spreadjs.fromJSON(spreadsheetObject.data);
+  }
+  var activeSheet = spreadjs.sheets[0];
+
+  activeSheet.bind($.wijmo.wijspread.Events.CellChanged, function(e, info) {
+    spreadsheetObject.data = spreadjs.toJSON();
+    Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {
+      console.log(result);
+    });
+  });
 };
+
+Template.spreadsheet.helpers({
+  data: function () {
+    if (!Template.instance().view.isRendered) {
+      return;
+    }
+    console.log("Data")
+    var spreadsheetObject = this;
+    var spreadjs = $("#grid").wijspread("spread");    
+
+    if (spreadsheetObject.data) {
+      spreadjs.fromJSON(spreadsheetObject.data);
+    }
+    var activeSheet = spreadjs.sheets[0];
+
+    activeSheet.bind($.wijmo.wijspread.Events.CellChanged, function(e, info) {
+      spreadsheetObject.data = spreadjs.toJSON();
+      Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {
+        console.log(result);
+      });
+    });
+
+  }
+});
