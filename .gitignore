@@ -1,0 +1,6 @@
+# Created by https://www.gitignore.io
+
+### Meteor ###
+.meteor/local
+.meteor/meteorite
+

@@ -1,0 +1,18 @@
+<template name="spreadsheets">
+  <div class="row">
+    <div class="col-md-12">
+      <button class="btn btn-primary new">New spreadsheet</button>
+    </div>
+  </div>
+
+<div class="row">
+  <div class="col-md-12">
+  {{#each spreadsheets}}
+    {{> spreadsheetItem}}
+  {{else}}
+  <p>You have no spreadsheet yet</p>
+  {{/each}}
+  </div>
+</div>
+
+</template>
