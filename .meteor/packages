@@ -16,4 +16,4 @@ accounts-password
 reactive-var
 djedi:sanitize-html
 less
-linto-spreadjs
+linto:spreadjs@4.0.2
