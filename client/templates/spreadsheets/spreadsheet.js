@@ -1,10 +1,9 @@
 Template.spreadsheet.rendered = function() {
-  console.log("rendered")
   var spreadsheetObject = this.data;
   var spreadjs;
 
   $("#grid").css({
-    height: window.innerHeight - $(".navbar-jbl42").height()  - $(".spread-header").height()  - 16,
+    height: window.innerHeight - $(".navbar-jbl42").height() - $(".spread-header").height() - 16,
     width: '100%'
   }).wijspread({
     sheetCount: 1
@@ -12,7 +11,7 @@ Template.spreadsheet.rendered = function() {
 
   $(window).resize(function() {
     $("#grid").css({
-      height: window.innerHeight - $(".navbar-jbl42").height()  - $(".spread-header").height()  - 16,
+      height: window.innerHeight - $(".navbar-jbl42").height() - $(".spread-header").height() - 16,
       width: '100%'
     });
   });
@@ -24,36 +23,35 @@ Template.spreadsheet.rendered = function() {
   if (spreadsheetObject.data) {
     spreadjs.fromJSON(spreadsheetObject.data);
   }
-  var activeSheet = spreadjs.sheets[0];
 
-  activeSheet.bind($.wijmo.wijspread.Events.CellChanged, function(e, info) {
-    spreadsheetObject.data = spreadjs.toJSON();
-    Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {
-      console.log(result);
-    });
-  });
-};
+  var activeCol = 1;
+  var activeRow = 1;
 
-Template.spreadsheet.helpers({
-  data: function () {
-    if (!Template.instance().view.isRendered) {
-      return;
-    }
-    console.log("Data")
-    var spreadsheetObject = this;
-    var spreadjs = $("#grid").wijspread("spread");    
-
-    if (spreadsheetObject.data) {
-      spreadjs.fromJSON(spreadsheetObject.data);
-    }
+  var monitorCellChange = function () {
     var activeSheet = spreadjs.sheets[0];
-
     activeSheet.bind($.wijmo.wijspread.Events.CellChanged, function(e, info) {
       spreadsheetObject.data = spreadjs.toJSON();
-      Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {
-        console.log(result);
-      });
-    });
+      Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {});
+    }); 
 
+    activeSheet.bind($.wijmo.wijspread.Events.SelectionChanged, function (e, info) {    
+      // store cursor
+      activeRow = activeSheet.getActiveRowIndex();
+      activeCol = activeSheet.getActiveColumnIndex();
+    });    
   }
-});
+  monitorCellChange();
+
+  Spreadsheets.find({_id: this.data._id}).observe({
+    changed: function(newDocument, oldDocument) {
+      if (newDocument.data) {
+        var spreadjs = $("#grid").wijspread("spread");
+        spreadjs.fromJSON(newDocument.data);  
+        var activeSheet = spreadjs.sheets[0]; 
+        activeSheet.setActiveCell(activeRow, activeCol);
+        monitorCellChange();
+      }
+    }
+  })
+
+};
