@@ -1,7 +1,13 @@
 <template name="spreadsheet">
   <div class="row">
     <div class="col-md-12 spread-header">
-      <h1>{{ name}}</h1>
+      <div class="toolbar">
+        <span>{{ name }}</span>
+        <div class="btn-group" role="group" aria-label="...">
+          <button type="button" class="btn btn-default btn-currency">Currency</button>
+          <button type="button" class="btn btn-default btn-general">General</button>
+        </div>
+      </div>
     </div>
   </div>
 
