@@ -31,7 +31,9 @@ Template.spreadsheet.rendered = function() {
     var activeSheet = spreadjs.sheets[0];
     activeSheet.bind($.wijmo.wijspread.Events.CellChanged, function(e, info) {
       spreadsheetObject.data = spreadjs.toJSON();
-      Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {});
+      Meteor.defer(function () {
+        Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {});
+      });
     }); 
 
     activeSheet.bind($.wijmo.wijspread.Events.SelectionChanged, function (e, info) {    
