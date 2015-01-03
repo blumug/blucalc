@@ -4,7 +4,7 @@ Template.spreadsheet.rendered = function() {
   var spreadjs;
 
   $("#grid").css({
-    height: 400,
+    height: window.innerHeight - $(".navbar-jbl42").height()  - $(".spread-header").height()  - 16,
     width: '100%'
   }).wijspread({
     sheetCount: 1
@@ -12,7 +12,7 @@ Template.spreadsheet.rendered = function() {
 
   $(window).resize(function() {
     $("#grid").css({
-      height: '100%',
+      height: window.innerHeight - $(".navbar-jbl42").height()  - $(".spread-header").height()  - 16,
       width: '100%'
     });
   });
