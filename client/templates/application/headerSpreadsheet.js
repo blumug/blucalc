@@ -43,5 +43,9 @@ Template.headerSpreadsheet.helpers({
 
   'color': function() {
     return randomColor();
+  },
+
+  'email': function() {
+    return this.emails[0].address.substr(0, 3).toUpperCase();
   }
 })

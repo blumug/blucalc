@@ -113,4 +113,9 @@ body > .container {
 
 .square {
     padding: 0px 4px;
+    margin-right: 5px;
+}
+
+.btn-edit-name {
+    cursor: pointer;
 }
