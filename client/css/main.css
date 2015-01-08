@@ -86,8 +86,8 @@ body > .container {
 /* ##### SPREADSHIT LIST ##### */
 
 .spreadsheetList {
-    padding: 10px;
-    width: 800px;
+    padding: 25px 10px;
+    width: 100%;
 }
 
 .spreadsheetItem {
