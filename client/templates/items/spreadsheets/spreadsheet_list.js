@@ -11,7 +11,7 @@ Template.spreadsheetList.helpers({
         }
       });
     } else {
-      return Spreadsheets.find({userId: Meteor.userId()});
+      return Spreadsheets.find();
     }
   }
 })
