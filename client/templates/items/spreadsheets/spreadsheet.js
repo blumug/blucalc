@@ -28,35 +28,37 @@ Template.spreadsheet.rendered = function() {
 
   var activeCol = 1;
   var activeRow = 1;
-  
-//  spreadjs.getActiveSheet().getCells(1, 1, 2, 2).backColor("#CCCCFF"); 
 
-  var monitorCellChange = function () {
+  //  spreadjs.getActiveSheet().getCells(1, 1, 2, 2).backColor("#CCCCFF"); 
+
+  var monitorCellChange = function() {
     var activeSheet = spreadjs.getActiveSheet();
 
     activeSheet.bind($.wijmo.wijspread.Events.CellChanged, function(e, info) {
       console.log("cellchanged")
       spreadsheetObject.data = spreadjs.toJSON();
-      Meteor.defer(function () {
+      Meteor.defer(function() {
         Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {});
       });
-    }); 
+    });
 
-    activeSheet.bind($.wijmo.wijspread.Events.SelectionChanged, function (e, info) {    
+    activeSheet.bind($.wijmo.wijspread.Events.SelectionChanged, function(e, info) {
       // store cursor
       activeRow = activeSheet.getActiveRowIndex();
       activeCol = activeSheet.getActiveColumnIndex();
-    });    
+    });
   }
   monitorCellChange();
 
-  Spreadsheets.find({_id: this.data._id}).observe({
+  Spreadsheets.find({
+    _id: this.data._id
+  }).observe({
     changed: function(newDocument, oldDocument) {
       if (newDocument.data) {
         var spreadjs = $("#grid").wijspread("spread");
-        spreadjs.fromJSON(newDocument.data);  
+        spreadjs.fromJSON(newDocument.data);
         spreadjs.repaint();
-        var activeSheet = spreadjs.sheets[0]; 
+        var activeSheet = spreadjs.sheets[0];
         activeSheet.setActiveCell(activeRow, activeCol);
         monitorCellChange();
       }
@@ -66,7 +68,7 @@ Template.spreadsheet.rendered = function() {
 
 
 Template.spreadsheet.events({
-  'click .btn-currency': function (e) {
+  'click .btn-currency': function(e) {
     e.preventDefault()
     var spreadjs = $("#grid").wijspread("spread");
     var activeSheet = spreadjs.getActiveSheet();
@@ -76,7 +78,7 @@ Template.spreadsheet.events({
     activeSheet.getCell(activeRow, activeCol).formatter("#,##0.00 €");
   },
 
-  'click .btn-general': function (e) {
+  'click .btn-general': function(e) {
     e.preventDefault()
     var spreadjs = $("#grid").wijspread("spread");
     var activeSheet = spreadjs.getActiveSheet();
@@ -87,11 +89,19 @@ Template.spreadsheet.events({
 
     var spreadsheetObject = this;
     spreadsheetObject.data = spreadjs.toJSON();
-    Meteor.defer(function () {
+    Meteor.defer(function() {
       Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {});
     });
+  },
 
-
+  'click .btn-invite': function(e) {
+    e.preventDefault()
+    bootbox.prompt("Invite friend", function(result) {
+      if (result) {
+        var spreadsheet = Spreadsheets.find().fetch();
+        Meteor.call("addUserToGroup", spreadsheet[0], result);
+      }
+    });
   }
 
 });

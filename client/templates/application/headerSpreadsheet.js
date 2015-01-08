@@ -31,10 +31,17 @@ Template.headerSpreadsheet.helpers({
   'title': function() {
     if (Spreadsheets.find().count() != 0) {
       var spreadsheets = Spreadsheets.find().fetch();
-      return spreadsheets[0].name + " ..";          
-    }
-    else {
+      return spreadsheets[0].name + " ..";
+    } else {
       return "";
     }
+  },
+
+  'userOnline': function() {
+    return Meteor.users.find({"status.online" : true});
+  },
+
+  'color': function() {
+    return randomColor();
   }
 })

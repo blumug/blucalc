@@ -22,6 +22,13 @@
                     {{> loginButtons}}
                 </ul>
                 <ul class="nav navbar-nav navbar-right inputSpreadsheet" style="color: white">
+                    {{#each userOnline}}
+                        <li>
+                            <div class='square' style="background-color: {{color}}"><span>FLA</span></div>
+                        </li>
+                    {{/each}}
+                </ul>
+                <ul class="nav navbar-nav navbar-right inputSpreadsheet" style="color: white">
                     <a type="button" class="btn-edit-name">{{title}}</a>
                 </ul>
             </div>

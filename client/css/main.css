@@ -110,3 +110,7 @@ body > .container {
 .inputSpreadsheet {
     padding: 20px;
 }
+
+.square {
+    padding: 0px 4px;
+}
