@@ -1,0 +1,9 @@
+<template name="spreadsheetList">
+	<div class="spreadsheetList">
+		{{#each spreadsheetList}}
+			{{> spreadsheetItem}}
+		{{else}}
+  			<p>You have no spreadsheet yet</p>
+  		{{/each}}
+	</div>
+</template>
