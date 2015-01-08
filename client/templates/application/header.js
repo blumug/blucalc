@@ -15,4 +15,5 @@ Template.header.events({
   'input #tagSearch': function(e, tmp) {
     Session.set("searchBar", $("#tagSearch").val());
   }
+
 });

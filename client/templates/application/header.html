@@ -11,12 +11,12 @@
                 <a class="navbar-brand" href="{{pathFor 'spreadsheetList'}}">blucalc</a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <button class="btn btn-primary new">New spreadsheet</button>
-                </ul>
-                <ul class="nav navbar-nav">
+                <div class="navbar-form navbar-left" role="search">
+                  <button class="btn btn-primary new">New</button>
+                  <div class="form-group">
                     <input type="search" class="form-control col-lg-8" name="tagSearch" id="tagSearch" placeholder="Search..." value="{{searchBar}}">
-                </ul>
+                  </div>
+                </div>
                
                 <ul class="nav navbar-nav navbar-right">
                     {{> loginButtons}}

@@ -16,27 +16,22 @@ Template.headerSpreadsheet.events({
   },
 
   'click .btn-edit-name': function() {
-    bootbox.prompt("Spreadsheet name", function(result) {
-      if (result) {
-        var spreadsheets = Spreadsheets.find().fetch();
+    bootbox.prompt({
+        title: "Spreadsheet name", 
+        value: this.name,
+        callback: function(result) {
+          if (result) {
+            var spreadsheets = Spreadsheets.find().fetch();
 
-        spreadsheets[0].name = result;
-        Meteor.call("spreadsheetUpdate", spreadsheets[0]);
-      }
+            spreadsheets[0].name = result;
+            Meteor.call("spreadsheetUpdate", spreadsheets[0]);
+          }
+        }
     });
   }
 });
 
 Template.headerSpreadsheet.helpers({
-  'title': function() {
-    if (Spreadsheets.find().count() != 0) {
-      var spreadsheets = Spreadsheets.find().fetch();
-      return spreadsheets[0].name + " ..";
-    } else {
-      return "";
-    }
-  },
-
   'userOnline': function() {
     return Meteor.users.find({"status.online" : true});
   },

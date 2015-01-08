@@ -109,7 +109,9 @@ body > .container {
 /* ##### BUTTON END ##### */
 
 .inputSpreadsheet {
-    padding: 20px;
+    line-height: 20px;
+    height: 50px;
+    padding: 15px 15px;
 }
 
 .square {

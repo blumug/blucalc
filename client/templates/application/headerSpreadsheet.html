@@ -11,25 +11,20 @@
                 <a class="navbar-brand" href="{{pathFor 'spreadsheetList'}}">blucalc</a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <button class="btn btn-primary new">New spreadsheet</button>
-                </ul>
-                <ul class="nav navbar-nav">
-                    <input type="search" class="form-control col-lg-8" name="tagSearch" id="tagSearch" placeholder="Search..." value="{{searchBar}}">
+                <ul class="nav navbar-nav inputSpreadsheet">
+                    <a type="button" class="btn-edit-name">{{name}}</a>
                 </ul>
 
-                <ul class="nav navbar-nav navbar-right">
-                    {{> loginButtons}}
-                </ul>
-                <ul class="nav navbar-nav navbar-right inputSpreadsheet" style="color: white">
+                <ul class="nav navbar-nav inputSpreadsheet">
                     {{#each userOnline}}
                         <li>
                             <div class='square' style="background-color: {{color}}"><span>{{ email }}</span></div>
                         </li>
                     {{/each}}
                 </ul>
-                <ul class="nav navbar-nav navbar-right inputSpreadsheet" style="color: white">
-                    <a type="button" class="btn-edit-name">{{title}}</a>
+
+                <ul class="nav navbar-nav navbar-right">
+                    {{> loginButtons}}
                 </ul>
             </div>
         </div>
