@@ -19,6 +19,7 @@ Template.spreadsheet.rendered = function() {
   });
 
   $("#gridvp").click(function() {
+    setBackgroundColor(Meteor.user(), spreadsheetObject);
     var selectedRanges = $("#grid").wijspread("spread").getActiveSheet().getSelections().toArray();
 
     // for (var i = 0; i < selectedRanges.length; i++) {
@@ -87,11 +88,6 @@ var setBackgroundColor = function(user, spreadsheet) {
     };
   }
   sheet.selectionBackColor(backColor);
-  var spreadsheetObject = this;
-  spreadsheetObject.data = $("#grid").wijspread("spread").toJSON();
-  Meteor.defer(function() {
-    Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {});
-  });
 }
 
 Template.spreadsheet.events({
