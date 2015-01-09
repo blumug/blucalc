@@ -16,6 +16,7 @@ Template.spreadsheet.rendered = function() {
   Session.set("refreshId", refreshId);
 
 
+
   $.wijmo.wijspread.Culture("en-US");
 
   $("#grid").css({
@@ -46,12 +47,19 @@ Template.spreadsheet.rendered = function() {
     spreadjs.fromJSON(spreadsheetObject.data);
   }
 
+  var fbx = new $.wijmo.wijspread.FormulaTextBox(document.getElementById('formulaBar'));
+  fbx.spread(spreadjs);
+
+
+
+
   var activeCol = 1;
   var activeRow = 1;
 
 
   var monitorCellChange = function() {
     var activeSheet = spreadjs.getActiveSheet();
+    activeSheet.allowCellOverflow(true);
 
     activeSheet.bind($.wijmo.wijspread.Events.CellChanged, function(e, info) {
       console.log("cellchanged")
@@ -71,16 +79,17 @@ Template.spreadsheet.rendered = function() {
 
   Spreadsheets.find({
     _id: this.data._id
-  }).observe({
-    changed: function(newDocument, oldDocument) {
-      if (newDocument.data) {
-        var spreadjs = $("#grid").wijspread("spread");
-        spreadjs.fromJSON(newDocument.data);
-        spreadjs.repaint();
-        var activeSheet = spreadjs.sheets[0];
-        activeSheet.setActiveCell(activeRow, activeCol);
-        monitorCellChange();
+  }).observeChanges({
+    changed: function(id, fields) {
+      if (!fields.data) {
+        return;
       }
+      var spreadjs = $("#grid").wijspread("spread");
+      spreadjs.fromJSON(fields.data);
+      spreadjs.repaint();
+      var activeSheet = spreadjs.sheets[0];
+      activeSheet.setActiveCell(activeRow, activeCol);
+      monitorCellChange();
     }
   });
 };

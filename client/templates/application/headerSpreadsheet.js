@@ -12,7 +12,7 @@ Template.headerSpreadsheet.events({
           var spreadsheets = Spreadsheets.find().fetch();
 
           spreadsheets[0].name = result;
-          Meteor.call("spreadsheetUpdate", spreadsheets[0]);
+          Meteor.call("spreadsheetUpdateName", spreadsheets[0]);
         }
       }
     });
