@@ -2,6 +2,23 @@ Template.spreadsheet.rendered = function() {
   var spreadsheetObject = this.data;
   var spreadjs;
 
+  var refreshId = Meteor.setInterval(function() {
+    var spreadsheet = Spreadsheets.find().fetch()[0];
+    Meteor.call("keepalive", spreadsheet._id);
+  }, 5000);
+
+  Meteor.setInterval(function() {
+    var now = (new Date()).getTime();
+    var spreadsheet = Spreadsheets.find().fetch()[0];
+
+    for (var i = spreadsheet.usersOnline.length - 1; i >= 0; i--) {
+      if (now - 10 * 1000 < spreadsheet.usersOnline[i].now) {
+        clearInterval(refreshId);
+        Meteor.call("isNotalive", spreadsheet._id);
+      }
+    };
+  }, 5000);
+
   $.wijmo.wijspread.Culture("en-US");
 
   $("#grid").css({
@@ -31,7 +48,7 @@ Template.spreadsheet.rendered = function() {
   spreadjs.useWijmoTheme = true;
   spreadjs.repaint();
 
-  setBackgroundColor(Meteor.user(), this.data);
+  setBackgroundColor(Meteor.user(), spreadsheetObject);
 
   if (spreadsheetObject.data) {
     spreadjs.fromJSON(spreadsheetObject.data);

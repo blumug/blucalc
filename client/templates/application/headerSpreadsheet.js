@@ -1,17 +1,4 @@
 Template.headerSpreadsheet.events({
-  'click .new': function() {
-    bootbox.prompt("Spreadsheet name", function(result) {
-      if (result) {
-        Spreadsheets.insert({
-          'name': result,
-          'userId': Meteor.userId(),
-          'group': [],
-          'usersOnline': []
-        });
-      }
-    });
-  },
-
   'input #tagSearch': function(e, tmp) {
     Session.set("searchBar", $("#tagSearch").val());
   },
@@ -34,9 +21,17 @@ Template.headerSpreadsheet.events({
 
 Template.headerSpreadsheet.helpers({
   'userOnline': function() {
+    var usersOnline = []
     if (Spreadsheets.find().count() > 0) {
       var usersOnline = Spreadsheets.find().fetch()[0].usersOnline;
-      return usersOnline;
     }
+
+    for (var i = usersOnline.length - 1; i >= 0; i--) {
+      if (usersOnline[i].status == false) {
+        usersOnline.splice(i, 1);
+      }
+    };
+
+    return usersOnline;
   }
-})
+});

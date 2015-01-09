@@ -5,7 +5,7 @@ Meteor.publish('spreadsheets', function () {
 
 Meteor.publish('spreadsheet', function(id) {
   check(id, String);
-  return Spreadsheets.find(id);
+  return Spreadsheets.find({ _id: id });
 });
 
 Meteor.publish('allUser', function() {
