@@ -2,10 +2,16 @@ Template.spreadsheet.rendered = function() {
   var spreadsheetObject = this.data;
   var spreadjs;
 
-  var refreshId = Meteor.setInterval(function() {
+  var sendKeepAlive = function () {
     var spreadsheet = Spreadsheets.find().fetch()[0];
     Meteor.call("keepalive", spreadsheet._id);
+  }
+
+  var refreshId = Meteor.setInterval(function() {
+    sendKeepAlive();
   }, 5000);
+
+  sendKeepAlive();
 
   Session.set("refreshId", refreshId);
 
