@@ -5,7 +5,8 @@ Template.header.events({
         var id = Spreadsheets.insert({
           'name': result,
           'userId': Meteor.userId(),
-          'group': []
+          'group': [],
+          'usersOnline': []
         });
         Router.go('/spreadsheets/' + id);
       }

@@ -5,7 +5,8 @@ Template.headerSpreadsheet.events({
         Spreadsheets.insert({
           'name': result,
           'userId': Meteor.userId(),
-          'group': []
+          'group': [],
+          'usersOnline': []
         });
       }
     });
@@ -17,34 +18,25 @@ Template.headerSpreadsheet.events({
 
   'click .btn-edit-name': function() {
     bootbox.prompt({
-        title: "Spreadsheet name", 
-        value: this.name,
-        callback: function(result) {
-          if (result) {
-            var spreadsheets = Spreadsheets.find().fetch();
+      title: "Spreadsheet name",
+      value: this.name,
+      callback: function(result) {
+        if (result) {
+          var spreadsheets = Spreadsheets.find().fetch();
 
-            spreadsheets[0].name = result;
-            Meteor.call("spreadsheetUpdate", spreadsheets[0]);
-          }
+          spreadsheets[0].name = result;
+          Meteor.call("spreadsheetUpdate", spreadsheets[0]);
         }
+      }
     });
   }
 });
 
 Template.headerSpreadsheet.helpers({
   'userOnline': function() {
-    return Meteor.users.find({"status.online" : true});
-  },
-
-  'color': function() {
-    var user = Meteor.user();
-    if (!user.profile.color) {
-      Meteor.users.update({ _id: user._id }, { $set: { "profile.color": randomColor() } });
+    if (Spreadsheets.find().count() > 0) {
+      var usersOnline = Spreadsheets.find().fetch()[0].usersOnline;
+      return usersOnline;
     }
-    return user.profile.color;
-  },
-
-  'email': function() {
-    return this.emails[0].address.substr(0, 3).toUpperCase();
   }
 })
