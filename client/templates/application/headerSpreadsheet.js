@@ -37,7 +37,11 @@ Template.headerSpreadsheet.helpers({
   },
 
   'color': function() {
-    return randomColor();
+    var user = Meteor.user();
+    if (!user.profile.color) {
+      Meteor.users.update({ _id: user._id }, { $set: { "profile.color": randomColor() } });
+    }
+    return user.profile.color;
   },
 
   'email': function() {

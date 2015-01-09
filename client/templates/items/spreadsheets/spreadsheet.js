@@ -18,10 +18,20 @@ Template.spreadsheet.rendered = function() {
     });
   });
 
+  $("#gridvp").click(function() {
+    var selectedRanges = $("#grid").wijspread("spread").getActiveSheet().getSelections().toArray();
+
+    // for (var i = 0; i < selectedRanges.length; i++) {
+    //   spreadjs.getCells(selectedRanges[i].row, selectedRanges[i].col, selectedRanges[i].rowCount, selectedRanges[i].colCount).backColor("#CCCCFF");
+    // };
+  });
+
   spreadjs = $("#grid").wijspread("spread");
   spreadjs.useWijmoTheme = true;
   spreadjs.repaint();
 
+  setBackgroundColor(Meteor.user());
+  
   if (spreadsheetObject.data) {
     spreadjs.fromJSON(spreadsheetObject.data);
   }
@@ -29,7 +39,6 @@ Template.spreadsheet.rendered = function() {
   var activeCol = 1;
   var activeRow = 1;
 
-  //  spreadjs.getActiveSheet().getCells(1, 1, 2, 2).backColor("#CCCCFF"); 
 
   var monitorCellChange = function() {
     var activeSheet = spreadjs.getActiveSheet();
@@ -66,6 +75,12 @@ Template.spreadsheet.rendered = function() {
   })
 };
 
+var setBackgroundColor = function(user) {
+  var spread = $("#grid").wijspread("spread");
+  var sheet = spread.getActiveSheet();
+  var backColor = user.profile.color;
+  sheet.selectionBackColor(backColor);
+}
 
 Template.spreadsheet.events({
   'click .btn-currency': function(e) {
