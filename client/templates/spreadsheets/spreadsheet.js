@@ -7,7 +7,7 @@ Template.spreadsheet.rendered = function() {
     Meteor.call("keepalive", spreadsheet._id);
   }, 5000);
 
-  this.refreshId.set(refreshId);
+  Session.set("refreshId", refreshId);
 
 
   $.wijmo.wijspread.Culture("en-US");
@@ -27,19 +27,14 @@ Template.spreadsheet.rendered = function() {
   });
 
   $("#gridvp").click(function() {
-  //  setBackgroundColor(Meteor.user(), spreadsheetObject);
+    setBackgroundColor(Meteor.user(), spreadsheetObject);
     var selectedRanges = $("#grid").wijspread("spread").getActiveSheet().getSelections().toArray();
-
-    // for (var i = 0; i < selectedRanges.length; i++) {
-    //   spreadjs.getCells(selectedRanges[i].row, selectedRanges[i].col, selectedRanges[i].rowCount, selectedRanges[i].colCount).backColor("#CCCCFF");
-    // };
   });
 
   spreadjs = $("#grid").wijspread("spread");
   spreadjs.useWijmoTheme = true;
   spreadjs.repaint();
-
- // setBackgroundColor(Meteor.user(), spreadsheetObject);
+  setBackgroundColor(Meteor.user(), spreadsheetObject);
 
   if (spreadsheetObject.data) {
     spreadjs.fromJSON(spreadsheetObject.data);
@@ -61,11 +56,11 @@ Template.spreadsheet.rendered = function() {
     });
 
     activeSheet.bind($.wijmo.wijspread.Events.SelectionChanged, function(e, info) {
-      // store cursor
       activeRow = activeSheet.getActiveRowIndex();
       activeCol = activeSheet.getActiveColumnIndex();
     });
-  }
+  };
+
   monitorCellChange();
 
   Spreadsheets.find({
@@ -81,11 +76,7 @@ Template.spreadsheet.rendered = function() {
         monitorCellChange();
       }
     }
-  })
-};
-
-Template.spreadsheet.created = function() {
-  this.refreshId = new ReactiveVar('');
+  });
 };
 
 var setBackgroundColor = function(user, spreadsheet) {
@@ -100,7 +91,7 @@ var setBackgroundColor = function(user, spreadsheet) {
     };
   }
   sheet.selectionBackColor(backColor);
-}
+};
 
 Template.spreadsheet.events({
   'click .btn-currency': function(e) {

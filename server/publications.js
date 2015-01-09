@@ -23,11 +23,13 @@ Meteor.publish('allUser', function() {
 
 Meteor.setInterval(function() {
   var now = (new Date()).getTime();
-  var spreadsheet = Spreadsheets.find().fetch()[0];
 
-  for (var i = spreadsheet.usersOnline.length - 1; i >= 0; i--) {
-    if (now - 10 * 1000 < spreadsheet.usersOnline[i].now) {
-      Meteor.call("isNotalive", spreadsheet._id);
+  if (Spreadsheets.find().count() > 0) {
+    var spreadsheet = Spreadsheets.find().fetch()[0];
+    for (var i = spreadsheet.usersOnline.length - 1; i >= 0; i--) {
+      if (now - 10 * 1000 < spreadsheet.usersOnline[i].now) {
+        Meteor.call("isNotalive", spreadsheet._id);
+      }
     }
-  };
+  }
 }, 5000);
