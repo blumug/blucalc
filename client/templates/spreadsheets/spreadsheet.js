@@ -7,17 +7,8 @@ Template.spreadsheet.rendered = function() {
     Meteor.call("keepalive", spreadsheet._id);
   }, 5000);
 
-  Meteor.setInterval(function() {
-    var now = (new Date()).getTime();
-    var spreadsheet = Spreadsheets.find().fetch()[0];
+  this.refreshId.set(refreshId);
 
-    for (var i = spreadsheet.usersOnline.length - 1; i >= 0; i--) {
-      if (now - 10 * 1000 < spreadsheet.usersOnline[i].now) {
-        clearInterval(refreshId);
-        Meteor.call("isNotalive", spreadsheet._id);
-      }
-    };
-  }, 5000);
 
   $.wijmo.wijspread.Culture("en-US");
 
@@ -36,7 +27,7 @@ Template.spreadsheet.rendered = function() {
   });
 
   $("#gridvp").click(function() {
-    setBackgroundColor(Meteor.user(), spreadsheetObject);
+  //  setBackgroundColor(Meteor.user(), spreadsheetObject);
     var selectedRanges = $("#grid").wijspread("spread").getActiveSheet().getSelections().toArray();
 
     // for (var i = 0; i < selectedRanges.length; i++) {
@@ -48,7 +39,7 @@ Template.spreadsheet.rendered = function() {
   spreadjs.useWijmoTheme = true;
   spreadjs.repaint();
 
-  setBackgroundColor(Meteor.user(), spreadsheetObject);
+ // setBackgroundColor(Meteor.user(), spreadsheetObject);
 
   if (spreadsheetObject.data) {
     spreadjs.fromJSON(spreadsheetObject.data);
@@ -91,6 +82,10 @@ Template.spreadsheet.rendered = function() {
       }
     }
   })
+};
+
+Template.spreadsheet.created = function() {
+  this.refreshId = new ReactiveVar('');
 };
 
 var setBackgroundColor = function(user, spreadsheet) {
