@@ -23,7 +23,7 @@ Template.headerSpreadsheet.helpers({
   'userOnline': function() {
     var usersOnline = []
     if (Spreadsheets.find().count() > 0) {
-      var usersOnline = Spreadsheets.find().fetch()[0].usersOnline;
+      usersOnline = Spreadsheets.find().fetch()[0].users;
     }
 
     for (var i = usersOnline.length - 1; i >= 0; i--) {

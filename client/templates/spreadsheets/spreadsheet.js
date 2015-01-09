@@ -84,9 +84,9 @@ var setBackgroundColor = function(user, spreadsheet) {
   var sheet = spread.getActiveSheet();
   var backColor = "#FFFFFF";
   if (user) {
-    for (var i = spreadsheet.usersOnline.length - 1; i >= 0; i--) {
-      if (spreadsheet.usersOnline[i].userId == user._id) {
-        backColor = spreadsheet.usersOnline[i].color;
+    for (var i = spreadsheet.users.length - 1; i >= 0; i--) {
+      if (spreadsheet.users[i].userId == user._id) {
+        backColor = spreadsheet.users[i].color;
       }
     };
   }

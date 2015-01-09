@@ -6,7 +6,7 @@ Template.header.events({
           'name': result,
           'userId': Meteor.userId(),
           'group': [],
-          'usersOnline': []
+          'users': []
         });
         Router.go('/spreadsheets/' + id);
       }
