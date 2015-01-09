@@ -33,15 +33,9 @@ Template.spreadsheet.rendered = function() {
     });
   });
 
-  $("#gridvp").click(function() {
-    setBackgroundColor(Meteor.user(), spreadsheetObject);
-    var selectedRanges = $("#grid").wijspread("spread").getActiveSheet().getSelections().toArray();
-  });
-
   spreadjs = $("#grid").wijspread("spread");
   spreadjs.useWijmoTheme = true;
   spreadjs.repaint();
-  setBackgroundColor(Meteor.user(), spreadsheetObject);
 
   if (spreadsheetObject.data) {
     spreadjs.fromJSON(spreadsheetObject.data);
@@ -92,20 +86,6 @@ Template.spreadsheet.rendered = function() {
       monitorCellChange();
     }
   });
-};
-
-var setBackgroundColor = function(user, spreadsheet) {
-  var spread = $("#grid").wijspread("spread");
-  var sheet = spread.getActiveSheet();
-  var backColor = "#FFFFFF";
-  if (user) {
-    for (var i = spreadsheet.users.length - 1; i >= 0; i--) {
-      if (spreadsheet.users[i].userId == user._id) {
-        backColor = spreadsheet.users[i].color;
-      }
-    };
-  }
-  sheet.selectionBackColor(backColor);
 };
 
 Template.spreadsheet.events({
