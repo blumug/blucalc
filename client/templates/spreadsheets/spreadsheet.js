@@ -20,7 +20,7 @@ Template.spreadsheet.rendered = function() {
   $.wijmo.wijspread.Culture("en-US");
 
   $("#grid").css({
-    height: window.innerHeight - $(".navbar-jbl42").height() - $(".spread-header").height() - 16,
+    height: window.innerHeight - $(".navbar-jbl42").height() - $(".spread-header").height() -  $("#formulaBar").height() - 16,
     width: '100%'
   }).wijspread({
     sheetCount: 1
@@ -28,7 +28,7 @@ Template.spreadsheet.rendered = function() {
 
   $(window).resize(function() {
     $("#grid").css({
-      height: window.innerHeight - $(".navbar-jbl42").height() - $(".spread-header").height() - 16,
+      height: window.innerHeight - $(".navbar-jbl42").height() - $(".spread-header").height() -  $("#formulaBar").height() - 16,
       width: '100%'
     });
   });
