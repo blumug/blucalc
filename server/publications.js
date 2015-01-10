@@ -1,5 +1,12 @@
 Meteor.publish('spreadsheets', function() {
-  return Spreadsheets.find()
+  return Spreadsheets.find({}, {
+    fields: {
+      name: 1
+    },
+    sort: {
+      name: 1
+    }
+  })
 });
 
 
