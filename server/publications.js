@@ -1,7 +1,8 @@
 Meteor.publish('spreadsheets', function() {
   return Spreadsheets.find({}, {
     fields: {
-      name: 1
+      name: 1,
+      users: 1      
     },
     sort: {
       name: 1
