@@ -3,8 +3,7 @@ Template.spreadsheet.rendered = function() {
   var spreadjs;
 
   var sendKeepAlive = function () {
-    var spreadsheet = Spreadsheets.find().fetch()[0];
-    Meteor.call("keepalive", spreadsheet._id);
+    Meteor.call("keepalive", Spreadsheets.findOne()._id);
   }
 
   var refreshId = Meteor.setInterval(function() {
@@ -14,8 +13,6 @@ Template.spreadsheet.rendered = function() {
   sendKeepAlive();
 
   Session.set("refreshId", refreshId);
-
-
 
   $.wijmo.wijspread.Culture("en-US");
 
@@ -44,12 +41,8 @@ Template.spreadsheet.rendered = function() {
   var fbx = new $.wijmo.wijspread.FormulaTextBox(document.getElementById('formulaBar'));
   fbx.spread(spreadjs);
 
-
-
-
   var activeCol = 1;
   var activeRow = 1;
-
 
   var monitorCellChange = function() {
     var activeSheet = spreadjs.getActiveSheet();
