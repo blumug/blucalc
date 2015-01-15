@@ -1,0 +1,23 @@
+<template name="register">
+
+<div class="landing-background-top">
+  <div class="container">
+    <div class="row">
+      <div class="inner">
+        <div class="col-md-12 login-page">
+          <h1>Register</h1>
+          <form id="register-form" action="action">
+              <div class="form-group" id="alertConnexion">
+              </div>
+              <input name="email" id="account-email" type="email" value="" placeholder="Email" class="form-control" required/>
+              <input name="password" id="account-password" type="password" value="" placeholder="Password" class="form-control" required/>
+              <input type="submit" id="create-account" value="Create" />
+          </form>
+          <a href="{{pathFor 'login'}}" class="password-lost">Have an account?</a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</template>

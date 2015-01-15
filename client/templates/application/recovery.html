@@ -1,0 +1,27 @@
+<template name="passwordRecovery">
+<div class="landing-background-top">
+    <div class="container">
+        <div class="row">
+            <div class="inner">
+                <div class="col-md-12 login-page">
+                    {{#if resetPassword}}
+                    <form id="new-password" action="action">
+                        <div>
+                            <input type="text" id="new-password-password" />
+                            <input type="submit" value="Change Password" />
+                        </div>
+                    </form>
+                    {{else}}
+                    <form id="recovery-form" action="action">
+                        <div>
+                            <input type="text" placeholder="Your email" id="recovery-email" />
+                            <input style="width: 364px" type="submit" value="Send Reset Instructions" />
+                        </div>
+                    </form>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</template>
