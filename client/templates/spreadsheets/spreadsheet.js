@@ -48,7 +48,7 @@ Template.spreadsheet.rendered = function() {
     var activeSheet = spreadjs.getActiveSheet();
     activeSheet.allowCellOverflow(true);
 
-    activeSheet.bind($.wijmo.wijspread.Events.CellChanged, function(e, info) {
+    spreadjs.bind($.wijmo.wijspread.Events.CellChanged, function(e, info) {
       spreadsheetObject.data = spreadjs.toJSON();
       Meteor.defer(function() {
         Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {});
@@ -83,7 +83,7 @@ Template.spreadsheet.rendered = function() {
       }
       spreadjs.fromJSON(fields.data);
       spreadjs.repaint();
-      var activeSheet = spreadjs.sheets[0];
+      var activeSheet = spreadjs.getActiveSheet();
       activeSheet.setActiveCell(activeRow, activeCol);
       monitorCellChange();
     }
