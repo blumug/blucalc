@@ -103,9 +103,9 @@ Template.spreadsheet.rendered = function() {
       }
       spreadjs.fromJSON(fields.data);
       spreadjs.repaint();
+      spreadjs.setActiveSheetIndex(activeSheetIndex);
       activeSheet = spreadjs.getActiveSheet();
       activeSheet.setActiveCell(tabActiveCell[activeSheetIndex].row, tabActiveCell[activeSheetIndex].col);
-      spreadjs.setActiveSheetIndex(activeSheetIndex);
       monitorCellChange();
     }
   });
