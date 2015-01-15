@@ -74,12 +74,14 @@ Template.spreadsheet.rendered = function() {
 
     spreadjs.bind($.wijmo.wijspread.Events.ActiveSheetChanged, function(e, info) {
       if (nbSheets < spreadjs.getSheetCount()) {
-        nbSheets++;
-        var activeCell = {
-          col: 0,
-          row: 0
-        };
-        tabActiveCell.push(activeCell);
+        for (var i = nbSheets; i < spreadjs.getSheetCount(); i++) {
+          var activeCell = {
+            col: 0,
+            row: 0
+          };
+          nbSheets++;
+          tabActiveCell.push(activeCell);
+        }
       }
     });
   };
@@ -97,6 +99,7 @@ Template.spreadsheet.rendered = function() {
       if (!spreadjs) {
         return;
       }
+      spreadjs.unbindAll();
       spreadjs.fromJSON(fields.data);
       spreadjs.repaint();
       spreadjs.setActiveSheetIndex(activeSheetIndex);
