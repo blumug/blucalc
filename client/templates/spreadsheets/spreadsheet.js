@@ -41,11 +41,21 @@ Template.spreadsheet.rendered = function() {
   var fbx = new $.wijmo.wijspread.FormulaTextBox(document.getElementById('formulaBar'));
   fbx.spread(spreadjs);
 
-  var activeCol = 1;
-  var activeRow = 1;
+  var nbSheets = spreadjs.getSheetCount();
+  var tabActiveCell = [];
+
+  for (var i = 0; i < nbSheets; i++) {
+    var activeCell = {
+      col: 0,
+      row: 0
+    };
+    tabActiveCell.push(activeCell);
+  }
+  var activeSheetIndex = spreadjs.getActiveSheetIndex();
+  var activeSheet = spreadjs.getActiveSheet();
 
   var monitorCellChange = function() {
-    var activeSheet = spreadjs.getActiveSheet();
+    activeSheet = spreadjs.getActiveSheet();
     activeSheet.allowCellOverflow(true);
 
     spreadjs.bind($.wijmo.wijspread.Events.CellChanged, function(e, info) {
@@ -55,16 +65,26 @@ Template.spreadsheet.rendered = function() {
       });
     });
 
-    activeSheet.bind($.wijmo.wijspread.Events.SelectionChanged, function(e, info) {
-      activeRow = activeSheet.getActiveRowIndex();
-      activeCol = activeSheet.getActiveColumnIndex();
+    spreadjs.bind($.wijmo.wijspread.Events.SelectionChanged, function(e, info) {
+      activeSheetIndex = spreadjs.getActiveSheetIndex();
+      activeSheet = spreadjs.getActiveSheet();
+      tabActiveCell[activeSheetIndex].row = activeSheet.getActiveRowIndex();
+      tabActiveCell[activeSheetIndex].col = activeSheet.getActiveColumnIndex();
     });
 
-    activeSheet.bind($.wijmo.wijspread.Events.ActiveSheetChanged, function(e, info) {
-      spreadsheetObject.data = spreadjs.toJSON();
-      Meteor.defer(function() {
-        Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {});
-      });
+    spreadjs.bind($.wijmo.wijspread.Events.ActiveSheetChanged, function(e, info) {
+      if (nbSheets < spreadjs.getSheetCount()) {
+        nbSheets++;
+        var activeCell = {
+          col: 0,
+          row: 0
+        };
+        tabActiveCell.push(activeCell);
+      }
+      // spreadsheetObject.data = spreadjs.toJSON();
+      // Meteor.defer(function() {
+      //   Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {});
+      // });
     });
   };
 
@@ -83,8 +103,9 @@ Template.spreadsheet.rendered = function() {
       }
       spreadjs.fromJSON(fields.data);
       spreadjs.repaint();
-      var activeSheet = spreadjs.getActiveSheet();
-      activeSheet.setActiveCell(activeRow, activeCol);
+      activeSheet = spreadjs.getActiveSheet();
+      activeSheet.setActiveCell(tabActiveCell[activeSheetIndex].row, tabActiveCell[activeSheetIndex].col);
+      spreadjs.setActiveSheetIndex(activeSheetIndex);
       monitorCellChange();
     }
   });
