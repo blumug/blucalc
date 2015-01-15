@@ -34,9 +34,9 @@ Meteor.setInterval(function() {
 
   Spreadsheets.update({}, {
     $pull: {
-      usersOnline: {
+      users: {
         now: {
-          $lt: (now - 60 * 1000)
+          $lt: (now - 10 * 1000)
         }
       }
     }
