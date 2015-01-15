@@ -60,7 +60,7 @@ Template.spreadsheet.rendered = function() {
       activeCol = activeSheet.getActiveColumnIndex();
     });
 
-    spreadjs.bind($.wijmo.wijspread.Events.ActiveSheetChanging, function(e, info) {
+    activeSheet.bind($.wijmo.wijspread.Events.ActiveSheetChanged, function(e, info) {
       spreadsheetObject.data = spreadjs.toJSON();
       Meteor.defer(function() {
         Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {});
