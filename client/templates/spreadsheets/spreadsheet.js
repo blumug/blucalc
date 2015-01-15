@@ -81,10 +81,6 @@ Template.spreadsheet.rendered = function() {
         };
         tabActiveCell.push(activeCell);
       }
-      // spreadsheetObject.data = spreadjs.toJSON();
-      // Meteor.defer(function() {
-      //   Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {});
-      // });
     });
   };
 
