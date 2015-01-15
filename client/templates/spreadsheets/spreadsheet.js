@@ -2,7 +2,7 @@ Template.spreadsheet.rendered = function() {
   var spreadsheetObject = this.data;
   var spreadjs;
 
-  var sendKeepAlive = function () {
+  var sendKeepAlive = function() {
     Meteor.call("keepalive", Spreadsheets.findOne()._id);
   }
 
@@ -17,7 +17,7 @@ Template.spreadsheet.rendered = function() {
   $.wijmo.wijspread.Culture("en-US");
 
   $("#grid").css({
-    height: window.innerHeight - $(".navbar-jbl42").height() - $(".spread-header").height() -  $("#formulaBar").height() - 16,
+    height: window.innerHeight - $(".navbar-jbl42").height() - $(".spread-header").height() - $("#formulaBar").height() - 16,
     width: '100%'
   }).wijspread({
     sheetCount: 1
@@ -25,7 +25,7 @@ Template.spreadsheet.rendered = function() {
 
   $(window).resize(function() {
     $("#grid").css({
-      height: window.innerHeight - $(".navbar-jbl42").height() - $(".spread-header").height() -  $("#formulaBar").height() - 16,
+      height: window.innerHeight - $(".navbar-jbl42").height() - $(".spread-header").height() - $("#formulaBar").height() - 16,
       width: '100%'
     });
   });
@@ -58,6 +58,13 @@ Template.spreadsheet.rendered = function() {
     activeSheet.bind($.wijmo.wijspread.Events.SelectionChanged, function(e, info) {
       activeRow = activeSheet.getActiveRowIndex();
       activeCol = activeSheet.getActiveColumnIndex();
+    });
+
+    spreadjs.bind($.wijmo.wijspread.Events.ActiveSheetChanging, function(e, info) {
+      spreadsheetObject.data = spreadjs.toJSON();
+      Meteor.defer(function() {
+        Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {});
+      });
     });
   };
 
