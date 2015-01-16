@@ -1,18 +1,42 @@
-Template.spreadsheet.rendered = function() {
-  var spreadsheetObject = this.data;
-  var spreadjs;
+var sendKeepAlive = function() {
+  Meteor.defer(function() {
+    Meteor.call("keepalive", Spreadsheets.findOne()._id, $("#grid").wijspread("spread").getActiveSheet().getSelections()[0], function(err, res) {
+      var spreadjs = $("#grid").wijspread("spread");
+      var color = getColorUser();
+      for (var i = spreadjs.sheets.length - 1; i >= 0; i--) {
+        spreadjs.sheets[i]._selectionBorderColor = color;
+      };
 
-  var sendKeepAlive = function() {
-    Meteor.call("keepalive", Spreadsheets.findOne()._id);
-  }
 
+      // var cell = $("#grid").wijspread("spread").getActiveSheet().getCells(3, 3, 7, 7);
+      // cell.backColor("red");
+
+      spreadjs.repaint();
+    });
+  });
+};
+
+var initKeepAlive = function() {
+  sendKeepAlive();
   var refreshId = Meteor.setInterval(function() {
     sendKeepAlive();
   }, 5000);
 
-  sendKeepAlive();
-
   Session.set("refreshId", refreshId);
+};
+
+var getColorUser = function() {
+  var spreadsheetObject = Spreadsheets.findOne();
+  for (var i = spreadsheetObject.users.length - 1; i >= 0; i--) {
+    if (spreadsheetObject.users[i].userId == Meteor.userId()) {
+      return spreadsheetObject.users[i].color;
+    }
+  };
+  return "black";
+};
+
+var initWindows = function() {
+  var spreadjs;
 
   $.wijmo.wijspread.Culture("en-US");
 
@@ -33,11 +57,19 @@ Template.spreadsheet.rendered = function() {
   spreadjs = $("#grid").wijspread("spread");
   spreadjs.useWijmoTheme = true;
   spreadjs.repaint();
+};
 
+Template.spreadsheet.rendered = function() {
+  var spreadsheetObject = this.data;
+  var spreadjs;
+
+  initKeepAlive();
+  initWindows();
+
+  spreadjs = $("#grid").wijspread("spread");
   if (spreadsheetObject.data) {
     spreadjs.fromJSON(spreadsheetObject.data);
   }
-
   var fbx = new $.wijmo.wijspread.FormulaTextBox(document.getElementById('formulaBar'));
   fbx.spread(spreadjs);
 
