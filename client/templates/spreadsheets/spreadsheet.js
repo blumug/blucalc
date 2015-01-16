@@ -1,3 +1,5 @@
+var formulaBar;
+
 var sendKeepAlive = function() {
   Meteor.defer(function() {
     Meteor.call("keepalive", Spreadsheets.findOne()._id);
@@ -47,81 +49,6 @@ var initWindows = function() {
   spreadjs.repaint();
 };
 
-var cleanOldSelection = function(cells) {
-  if (!cells[0]) {
-    return;
-  }
-
-  var sheet = $("#grid").wijspread("spread").getActiveSheet();
-  var ns = $.wijmo.wijspread;
-  var cell;
-
-  for (var y = cells[0].row; y < cells[0].rowCount + cells[0].row; y++) {
-    for (var x = cells[0].col; x < cells[0].colCount + cells[0].col; x++) {
-      cell = sheet.getCell(y, x);
-
-      if (x == cells[0].col) {
-        cell.clearStyleProperty("borderLeft");
-      }
-      if (y == cells[0].row) {
-        cell.clearStyleProperty("borderTop");
-      }
-      if (x == cells[0].colCount + cells[0].col - 1) {
-        cell.clearStyleProperty("borderRight");
-      }
-      if (y == cells[0].rowCount + cells[0].row - 1) {
-        cell.clearStyleProperty("borderBottom");
-      }
-    };
-  };
-};
-
-var printSelection = function(cells) {
-  if (!cells[0]) {
-    return;
-  }
-  var sheet = $("#grid").wijspread("spread").getActiveSheet();
-  var ns = $.wijmo.wijspread;
-  var color = getColorUser();
-  var cell;
-
-  for (var y = cells[0].row; y < cells[0].rowCount + cells[0].row; y++) {
-    for (var x = cells[0].col; x < cells[0].colCount + cells[0].col; x++) {
-      cell = sheet.getCell(y, x);
-
-      if (x == cells[0].col) {
-        cell.borderLeft(new ns.LineBorder(color, ns.LineStyle.thick));
-      }
-      if (y == cells[0].row) {
-        cell.borderTop(new ns.LineBorder(color, ns.LineStyle.thick));
-      }
-      if (x == cells[0].colCount + cells[0].col - 1) {
-        cell.borderRight(new ns.LineBorder(color, ns.LineStyle.thick));
-      }
-      if (y == cells[0].rowCount + cells[0].row - 1) {
-        cell.borderBottom(new ns.LineBorder(color, ns.LineStyle.thick));
-      }
-    };
-  };
-};
-
-var DisplayUsers = function(users) {
-  if (!users) {
-    return;
-  }
-  for (var i = users.length - 1; i >= 0; i--) {
-    printSelection(users[i].selection);
-  };
-};
-
-var HideUsers = function(users) {
-  if (!users) {
-    return;
-  }
-  for (var i = users.length - 1; i >= 0; i--) {
-    cleanOldSelection(users[i].selection);
-  };
-};
 
 Template.spreadsheet.rendered = function() {
   var spreadsheetObject = this.data;
@@ -134,8 +61,8 @@ Template.spreadsheet.rendered = function() {
   if (spreadsheetObject.data) {
     spreadjs.fromJSON(spreadsheetObject.data);
   }
-  var fbx = new $.wijmo.wijspread.FormulaTextBox(document.getElementById('formulaBar'));
-  fbx.spread(spreadjs);
+  formulaBar = new $.wijmo.wijspread.FormulaTextBox(document.getElementById('formulaBar'));
+  formulaBar.spread(spreadjs);
 
   var nbSheets = spreadjs.getSheetCount();
   var tabActiveCell = [];
@@ -157,7 +84,6 @@ Template.spreadsheet.rendered = function() {
     spreadjs.bind($.wijmo.wijspread.Events.CellChanged, function(e, info) {
       spreadsheetObject = Spreadsheets.findOne();
       activeSheet.setDefaultStyle(activeSheet.getDefaultStyle());      
-//      HideUsers(spreadsheetObject.users);
       spreadjs = $("#grid").wijspread("spread");
       spreadsheetObject.data = spreadjs.toJSON();
       Meteor.defer(function() {
@@ -170,13 +96,6 @@ Template.spreadsheet.rendered = function() {
       activeSheet = spreadjs.getActiveSheet();
       tabActiveCell[activeSheetIndex].row = activeSheet.getActiveRowIndex();
       tabActiveCell[activeSheetIndex].col = activeSheet.getActiveColumnIndex();
-
-      if (Session.get("activeSelection")) {
-        cleanOldSelection(Session.get("activeSelection"));
-      }
-      Session.set("activeSelection", activeSheet.getSelections());
-      printSelection(activeSheet.getSelections());
-      Meteor.call("changeSelection", Meteor.userId(), activeSheet.getSelections(), spreadsheetObject);
     });
 
     spreadjs.bind($.wijmo.wijspread.Events.ActiveSheetChanged, function(e, info) {
@@ -209,9 +128,9 @@ Template.spreadsheet.rendered = function() {
       spreadsheetObject = Spreadsheets.findOne();
       spreadjs.unbindAll();
       spreadjs.fromJSON(fields.data);
-      DisplayUsers(fields.users);
       spreadjs.repaint();
       spreadjs.setActiveSheetIndex(activeSheetIndex);
+      formulaBar.spread(spreadjs);
       activeSheet = spreadjs.getActiveSheet();
       activeSheet.setActiveCell(tabActiveCell[activeSheetIndex].row, tabActiveCell[activeSheetIndex].col);
       monitorCellChange();
@@ -244,16 +163,6 @@ Template.spreadsheet.events({
     spreadsheetObject.data = spreadjs.toJSON();
     Meteor.defer(function() {
       Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {});
-    });
-  },
-
-  'click .btn-invite': function(e) {
-    e.preventDefault()
-    bootbox.prompt("Invite friend", function(result) {
-      if (result) {
-        var spreadsheet = Spreadsheets.find().fetch();
-        Meteor.call("addUserToGroup", spreadsheet[0], result);
-      }
     });
   }
 
