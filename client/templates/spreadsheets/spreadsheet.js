@@ -1,18 +1,6 @@
 var sendKeepAlive = function() {
   Meteor.defer(function() {
-    Meteor.call("keepalive", Spreadsheets.findOne()._id, $("#grid").wijspread("spread").getActiveSheet().getSelections()[0], function(err, res) {
-      var spreadjs = $("#grid").wijspread("spread");
-      var color = getColorUser();
-      for (var i = spreadjs.sheets.length - 1; i >= 0; i--) {
-        spreadjs.sheets[i]._selectionBorderColor = color;
-      };
-
-
-      // var cell = $("#grid").wijspread("spread").getActiveSheet().getCells(3, 3, 7, 7);
-      // cell.backColor("red");
-
-      spreadjs.repaint();
-    });
+    Meteor.call("keepalive", Spreadsheets.findOne()._id);
   });
 };
 
@@ -59,6 +47,57 @@ var initWindows = function() {
   spreadjs.repaint();
 };
 
+var cleanOldSelection = function(cells) {
+  var sheet = $("#grid").wijspread("spread").getActiveSheet();
+  var ns = $.wijmo.wijspread;
+  var cell;
+
+  for (var y = cells[0].row; y < cells[0].rowCount + cells[0].row; y++) {
+    for (var x = cells[0].col; x < cells[0].colCount + cells[0].col; x++) {
+      cell = sheet.getCell(y, x);
+
+      if (x == cells[0].col) {
+        cell.clearStyleProperty("borderLeft");        
+      }
+      if (y == cells[0].row) {
+        cell.clearStyleProperty("borderTop");        
+      }
+      if (x == cells[0].colCount + cells[0].col - 1) {
+        cell.clearStyleProperty("borderRight");
+      }
+      if (y == cells[0].rowCount + cells[0].row - 1) {
+        cell.clearStyleProperty("borderBottom");
+      }
+    };
+  };
+};
+
+var printSelection = function(cells) {
+  var sheet = $("#grid").wijspread("spread").getActiveSheet();
+  var ns = $.wijmo.wijspread;
+  var color = getColorUser();
+  var cell;
+
+  for (var y = cells[0].row; y < cells[0].rowCount + cells[0].row; y++) {
+    for (var x = cells[0].col; x < cells[0].colCount + cells[0].col; x++) {
+      cell = sheet.getCell(y, x);
+
+      if (x == cells[0].col) {
+        cell.borderLeft(new ns.LineBorder(color, ns.LineStyle.thick));        
+      }
+      if (y == cells[0].row) {
+        cell.borderTop(new ns.LineBorder(color, ns.LineStyle.thick));
+      }
+      if (x == cells[0].colCount + cells[0].col - 1) {
+        cell.borderRight(new ns.LineBorder(color, ns.LineStyle.thick));
+      }
+      if (y == cells[0].rowCount + cells[0].row - 1) {
+        cell.borderBottom(new ns.LineBorder(color, ns.LineStyle.thick));
+      }
+    };
+  };
+};
+
 Template.spreadsheet.rendered = function() {
   var spreadsheetObject = this.data;
   var spreadjs;
@@ -102,6 +141,13 @@ Template.spreadsheet.rendered = function() {
       activeSheet = spreadjs.getActiveSheet();
       tabActiveCell[activeSheetIndex].row = activeSheet.getActiveRowIndex();
       tabActiveCell[activeSheetIndex].col = activeSheet.getActiveColumnIndex();
+
+      if (Session.get("activeSelection")) {
+        cleanOldSelection(Session.get("activeSelection"));
+      }
+      Session.set("activeSelection", activeSheet.getSelections());
+      printSelection(activeSheet.getSelections());
+      Meteor.call("changeSelection", Meteor.userId(), activeSheet.getSelections(), spreadsheetObject);
     });
 
     spreadjs.bind($.wijmo.wijspread.Events.ActiveSheetChanged, function(e, info) {
