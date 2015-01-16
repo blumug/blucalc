@@ -48,6 +48,10 @@ var initWindows = function() {
 };
 
 var cleanOldSelection = function(cells) {
+  if (!cells[0]) {
+    return;
+  }
+
   var sheet = $("#grid").wijspread("spread").getActiveSheet();
   var ns = $.wijmo.wijspread;
   var cell;
@@ -57,10 +61,10 @@ var cleanOldSelection = function(cells) {
       cell = sheet.getCell(y, x);
 
       if (x == cells[0].col) {
-        cell.clearStyleProperty("borderLeft");        
+        cell.clearStyleProperty("borderLeft");
       }
       if (y == cells[0].row) {
-        cell.clearStyleProperty("borderTop");        
+        cell.clearStyleProperty("borderTop");
       }
       if (x == cells[0].colCount + cells[0].col - 1) {
         cell.clearStyleProperty("borderRight");
@@ -73,6 +77,9 @@ var cleanOldSelection = function(cells) {
 };
 
 var printSelection = function(cells) {
+  if (!cells[0]) {
+    return;
+  }
   var sheet = $("#grid").wijspread("spread").getActiveSheet();
   var ns = $.wijmo.wijspread;
   var color = getColorUser();
@@ -83,7 +90,7 @@ var printSelection = function(cells) {
       cell = sheet.getCell(y, x);
 
       if (x == cells[0].col) {
-        cell.borderLeft(new ns.LineBorder(color, ns.LineStyle.thick));        
+        cell.borderLeft(new ns.LineBorder(color, ns.LineStyle.thick));
       }
       if (y == cells[0].row) {
         cell.borderTop(new ns.LineBorder(color, ns.LineStyle.thick));
@@ -95,6 +102,24 @@ var printSelection = function(cells) {
         cell.borderBottom(new ns.LineBorder(color, ns.LineStyle.thick));
       }
     };
+  };
+};
+
+var DisplayUsers = function(users) {
+  if (!users) {
+    return;
+  }
+  for (var i = users.length - 1; i >= 0; i--) {
+    printSelection(users[i].selection);
+  };
+};
+
+var HideUsers = function(users) {
+  if (!users) {
+    return;
+  }
+  for (var i = users.length - 1; i >= 0; i--) {
+    cleanOldSelection(users[i].selection);
   };
 };
 
@@ -130,6 +155,10 @@ Template.spreadsheet.rendered = function() {
     activeSheet.allowCellOverflow(true);
 
     spreadjs.bind($.wijmo.wijspread.Events.CellChanged, function(e, info) {
+      spreadsheetObject = Spreadsheets.findOne();
+      activeSheet.setDefaultStyle(activeSheet.getDefaultStyle());      
+//      HideUsers(spreadsheetObject.users);
+      spreadjs = $("#grid").wijspread("spread");
       spreadsheetObject.data = spreadjs.toJSON();
       Meteor.defer(function() {
         Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {});
@@ -177,8 +206,10 @@ Template.spreadsheet.rendered = function() {
       if (!spreadjs) {
         return;
       }
+      spreadsheetObject = Spreadsheets.findOne();
       spreadjs.unbindAll();
       spreadjs.fromJSON(fields.data);
+      DisplayUsers(fields.users);
       spreadjs.repaint();
       spreadjs.setActiveSheetIndex(activeSheetIndex);
       activeSheet = spreadjs.getActiveSheet();
@@ -209,6 +240,7 @@ Template.spreadsheet.events({
     activeSheet.getCell(activeRow, activeCol).formatter("General");
 
     var spreadsheetObject = this;
+    HideUsers(spreadsheetObject.users);
     spreadsheetObject.data = spreadjs.toJSON();
     Meteor.defer(function() {
       Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {});
