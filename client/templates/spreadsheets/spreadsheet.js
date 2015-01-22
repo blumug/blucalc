@@ -185,6 +185,48 @@ Template.spreadsheet.events({
       };
 
     activeSheet.isPaintSuspended(false); 
+  },
+
+  'click .btn-foreground-color': function(e) {
+    e.preventDefault()
+    var spreadjs = $("#grid").wijspread("spread");
+    var activeSheet = spreadjs.getActiveSheet();
+    var selections = activeSheet.getSelections();
+
+    activeSheet.isPaintSuspended(true);
+
+      for (var i = selections.length - 1; i >= 0; i--) {
+
+        for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
+          for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
+            activeSheet.getCell(y, x).foreColor($(".color-foreground").val());
+          };
+        };
+
+      };
+
+    activeSheet.isPaintSuspended(false); 
+  },
+
+  'click .btn-clear-style': function(e) {
+    e.preventDefault()
+    var spreadjs = $("#grid").wijspread("spread");
+    var activeSheet = spreadjs.getActiveSheet();
+    var selections = activeSheet.getSelections();
+    var style = activeSheet.getDefaultStyle(activeSheet);
+
+      for (var i = selections.length - 1; i >= 0; i--) {
+
+        for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
+          for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
+            activeSheet.setStyle(y, x, style);
+          };
+        };
+
+      };
+
+//      setDefaultStyle(style, sheetArea)
+
   }
 
 });

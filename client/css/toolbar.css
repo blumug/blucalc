@@ -1,6 +1,7 @@
 .btn-toolbar-spread {
 	height: 34px;
 	width: 20px;
+	float: left;
 }
 
 .caret-spread {
