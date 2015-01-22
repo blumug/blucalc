@@ -278,6 +278,72 @@ Template.spreadsheet.events({
         };
 
       };
-  }
+  },
 
+  'click .btn-insert-col': function(e) {
+    e.preventDefault()
+    var spreadjs = $("#grid").wijspread("spread");
+    var activeSheet = spreadjs.getActiveSheet();
+    var selections = activeSheet.getSelections()[0];
+    
+    activeSheet.addColumns(selections.col, 1);
+  },
+
+  'click .btn-insert-row': function(e) {
+    e.preventDefault()
+    var spreadjs = $("#grid").wijspread("spread");
+    var activeSheet = spreadjs.getActiveSheet();
+    var selections = activeSheet.getSelections()[0];
+    
+    activeSheet.addRows(selections.row, 1);
+  },
+
+  'click .btn-remove-col': function(e) {
+    e.preventDefault()
+    var spreadjs = $("#grid").wijspread("spread");
+    var activeSheet = spreadjs.getActiveSheet();
+    var selections = activeSheet.getSelections()[0];
+    bootbox.dialog({
+      message: "Do you want delete this Column(s)",
+      title: "Warning",
+      buttons: {
+        main: {
+          label: "Cancel",
+          className: "btn-primary"
+        },
+        danger: {
+          label: "Delete",
+          className: "btn-danger",
+          callback: function() {
+            activeSheet.deleteColumns(selections.col, selections.colCount);    
+          }
+        }
+      }
+    });
+  },
+
+  'click .btn-remove-row': function(e) {
+    e.preventDefault()
+    var spreadjs = $("#grid").wijspread("spread");
+    var activeSheet = spreadjs.getActiveSheet();
+    var selections = activeSheet.getSelections()[0];
+
+    bootbox.dialog({
+      message: "Do you want delete this Row(s)",
+      title: "Warning",
+      buttons: {
+        main: {
+          label: "Cancel",
+          className: "btn-primary"
+        },
+        danger: {
+          label: "Delete",
+          className: "btn-danger",
+          callback: function() {
+            activeSheet.deleteRows(selections.row, selections.rowCount);
+          }
+        }
+      }
+    });
+  }
 });
