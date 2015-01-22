@@ -83,8 +83,9 @@ Template.spreadsheet.rendered = function() {
 
     spreadjs.bind($.wijmo.wijspread.Events.CellChanged, function(e, info) {
       spreadsheetObject = Spreadsheets.findOne();
-      activeSheet.setDefaultStyle(activeSheet.getDefaultStyle());      
+      activeSheet.setDefaultStyle(activeSheet.getDefaultStyle());
       spreadjs = $("#grid").wijspread("spread");
+      Session.set("spread", spreadjs);
       spreadsheetObject.data = spreadjs.toJSON();
       Meteor.defer(function() {
         Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {});
@@ -174,17 +175,17 @@ Template.spreadsheet.events({
 
     activeSheet.isPaintSuspended(true);
 
-      for (var i = selections.length - 1; i >= 0; i--) {
+    for (var i = selections.length - 1; i >= 0; i--) {
 
-        for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
-          for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
-            activeSheet.getCell(y, x).backColor($(".color-background").val());
-          };
+      for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
+        for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
+          activeSheet.getCell(y, x).backColor($(".color-background").val());
         };
-
       };
 
-    activeSheet.isPaintSuspended(false); 
+    };
+
+    activeSheet.isPaintSuspended(false);
   },
 
   'click .btn-foreground-color': function(e) {
@@ -195,17 +196,17 @@ Template.spreadsheet.events({
 
     activeSheet.isPaintSuspended(true);
 
-      for (var i = selections.length - 1; i >= 0; i--) {
+    for (var i = selections.length - 1; i >= 0; i--) {
 
-        for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
-          for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
-            activeSheet.getCell(y, x).foreColor($(".color-foreground").val());
-          };
+      for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
+        for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
+          activeSheet.getCell(y, x).foreColor($(".color-foreground").val());
         };
-
       };
 
-    activeSheet.isPaintSuspended(false); 
+    };
+
+    activeSheet.isPaintSuspended(false);
   },
 
   'click .btn-clear-style': function(e) {
@@ -215,15 +216,15 @@ Template.spreadsheet.events({
     var selections = activeSheet.getSelections();
     var style = activeSheet.getDefaultStyle(activeSheet);
 
-      for (var i = selections.length - 1; i >= 0; i--) {
+    for (var i = selections.length - 1; i >= 0; i--) {
 
-        for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
-          for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
-            activeSheet.setStyle(y, x, style);
-          };
+      for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
+        for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
+          activeSheet.setStyle(y, x, style);
         };
-
       };
+
+    };
   },
 
   'click .btn-align-left': function(e) {
@@ -233,15 +234,15 @@ Template.spreadsheet.events({
     var selections = activeSheet.getSelections();
     var style = activeSheet.getDefaultStyle(activeSheet);
 
-      for (var i = selections.length - 1; i >= 0; i--) {
+    for (var i = selections.length - 1; i >= 0; i--) {
 
-        for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
-          for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
-            activeSheet.getCell(y, x).hAlign($.wijmo.wijspread.HorizontalAlign.left);
-          };
+      for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
+        for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
+          activeSheet.getCell(y, x).hAlign($.wijmo.wijspread.HorizontalAlign.left);
         };
-
       };
+
+    };
   },
 
   'click .btn-align-right': function(e) {
@@ -251,15 +252,15 @@ Template.spreadsheet.events({
     var selections = activeSheet.getSelections();
     var style = activeSheet.getDefaultStyle(activeSheet);
 
-      for (var i = selections.length - 1; i >= 0; i--) {
+    for (var i = selections.length - 1; i >= 0; i--) {
 
-        for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
-          for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
-            activeSheet.getCell(y, x).hAlign($.wijmo.wijspread.HorizontalAlign.right);
-          };
+      for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
+        for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
+          activeSheet.getCell(y, x).hAlign($.wijmo.wijspread.HorizontalAlign.right);
         };
-
       };
+
+    };
   },
 
   'click .btn-align-center': function(e) {
@@ -269,15 +270,16 @@ Template.spreadsheet.events({
     var selections = activeSheet.getSelections();
     var style = activeSheet.getDefaultStyle(activeSheet);
 
-      for (var i = selections.length - 1; i >= 0; i--) {
+    var st = activeSheet.getStyle(0, 0);
+    for (var i = selections.length - 1; i >= 0; i--) {
 
-        for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
-          for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
-            activeSheet.getCell(y, x).hAlign($.wijmo.wijspread.HorizontalAlign.center);
-          };
+      for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
+        for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
+          activeSheet.getCell(y, x).hAlign($.wijmo.wijspread.HorizontalAlign.center);
         };
-
       };
+
+    };
   },
 
   'click .btn-insert-col': function(e) {
@@ -285,7 +287,7 @@ Template.spreadsheet.events({
     var spreadjs = $("#grid").wijspread("spread");
     var activeSheet = spreadjs.getActiveSheet();
     var selections = activeSheet.getSelections()[0];
-    
+
     activeSheet.addColumns(selections.col, 1);
   },
 
@@ -294,7 +296,7 @@ Template.spreadsheet.events({
     var spreadjs = $("#grid").wijspread("spread");
     var activeSheet = spreadjs.getActiveSheet();
     var selections = activeSheet.getSelections()[0];
-    
+
     activeSheet.addRows(selections.row, 1);
   },
 
@@ -315,7 +317,7 @@ Template.spreadsheet.events({
           label: "Delete",
           className: "btn-danger",
           callback: function() {
-            activeSheet.deleteColumns(selections.col, selections.colCount);    
+            activeSheet.deleteColumns(selections.col, selections.colCount);
           }
         }
       }
@@ -345,5 +347,71 @@ Template.spreadsheet.events({
         }
       }
     });
+  },
+
+  'click .btn-remove-row': function(e) {
+    e.preventDefault()
+    var spreadjs = $("#grid").wijspread("spread");
+    var activeSheet = spreadjs.getActiveSheet();
+    var selections = activeSheet.getSelections();
+    var style = activeSheet.getDefaultStyle(activeSheet);
+
+    var st = activeSheet.getStyle(0, 0);
+    for (var i = selections.length - 1; i >= 0; i--) {
+      for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
+        for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
+          activeSheet.getCell(y, x).hAlign($.wijmo.wijspread.HorizontalAlign.center);
+        };
+      };
+    };
+  },
+
+  'click .btn-bold': function(e) {
+    e.preventDefault()
+    var spreadjs = $("#grid").wijspread("spread");
+    var activeSheet = spreadjs.getActiveSheet();
+    var selections = activeSheet.getSelections();
+    var style;
+    var font;
+
+    var st = activeSheet.getStyle(0, 0);
+    for (var i = selections.length - 1; i >= 0; i--) {
+      for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
+        for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
+          style = activeSheet.getStyle(y, x);
+          if (style != null) {
+            font = style.font;
+          }
+
+          if (!font && font == undefined) {
+            font = "";
+          }
+
+          if (font.indexOf("bold") != -1) {
+            font = font.replace("bold", "");
+          } else {
+            font = font.concat(" bold");
+          }
+          activeSheet.getCell(y, x).font(font);
+        };
+      };
+    };
+  },
+
+  'click .btn-italic': function(e) {
+    e.preventDefault()
+    var spreadjs = $("#grid").wijspread("spread");
+    var activeSheet = spreadjs.getActiveSheet();
+    var selections = activeSheet.getSelections();
+    var style = activeSheet.getDefaultStyle(activeSheet);
+
+    var st = activeSheet.getStyle(0, 0);
+    for (var i = selections.length - 1; i >= 0; i--) {
+      for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
+        for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
+          activeSheet.getCell(y, x).hAlign($.wijmo.wijspread.HorizontalAlign.center);
+        };
+      };
+    };
   }
 });
