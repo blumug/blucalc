@@ -224,9 +224,60 @@ Template.spreadsheet.events({
         };
 
       };
+  },
 
-//      setDefaultStyle(style, sheetArea)
+  'click .btn-align-left': function(e) {
+    e.preventDefault()
+    var spreadjs = $("#grid").wijspread("spread");
+    var activeSheet = spreadjs.getActiveSheet();
+    var selections = activeSheet.getSelections();
+    var style = activeSheet.getDefaultStyle(activeSheet);
 
+      for (var i = selections.length - 1; i >= 0; i--) {
+
+        for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
+          for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
+            activeSheet.getCell(y, x).hAlign($.wijmo.wijspread.HorizontalAlign.left);
+          };
+        };
+
+      };
+  },
+
+  'click .btn-align-right': function(e) {
+    e.preventDefault()
+    var spreadjs = $("#grid").wijspread("spread");
+    var activeSheet = spreadjs.getActiveSheet();
+    var selections = activeSheet.getSelections();
+    var style = activeSheet.getDefaultStyle(activeSheet);
+
+      for (var i = selections.length - 1; i >= 0; i--) {
+
+        for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
+          for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
+            activeSheet.getCell(y, x).hAlign($.wijmo.wijspread.HorizontalAlign.right);
+          };
+        };
+
+      };
+  },
+
+  'click .btn-align-center': function(e) {
+    e.preventDefault()
+    var spreadjs = $("#grid").wijspread("spread");
+    var activeSheet = spreadjs.getActiveSheet();
+    var selections = activeSheet.getSelections();
+    var style = activeSheet.getDefaultStyle(activeSheet);
+
+      for (var i = selections.length - 1; i >= 0; i--) {
+
+        for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
+          for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
+            activeSheet.getCell(y, x).hAlign($.wijmo.wijspread.HorizontalAlign.center);
+          };
+        };
+
+      };
   }
 
 });
