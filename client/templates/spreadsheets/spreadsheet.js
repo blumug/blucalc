@@ -394,13 +394,18 @@ Template.spreadsheet.events({
   },
 
   'click .btn-span': function(e) {
-    e.preventDefault()
+    e.preventDefault();
     var spreadjs = $("#grid").wijspread("spread");
     var activeSheet = spreadjs.getActiveSheet();
     var selections = activeSheet.getSelections();
-    
+    var spans = activeSheet.getSpans();
     for (var i = selections.length - 1; i >= 0; i--) {
       activeSheet.addSpan(selections[i].row, selections[i].col, selections[i].rowCount, selections[i].colCount);
+      for (var i = spans.length - 1; i >= 0; i--) {
+        if (spans[i].row == selections[0].row && spans[i].col == selections[0].col) {
+          activeSheet.removeSpan(spans[i].row, spans[i].col)
+        }
+      }
     }
   }
 });
