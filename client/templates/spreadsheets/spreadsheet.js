@@ -348,23 +348,6 @@ Template.spreadsheet.events({
     });
   },
 
-  'click .btn-remove-row': function(e) {
-    e.preventDefault()
-    var spreadjs = $("#grid").wijspread("spread");
-    var activeSheet = spreadjs.getActiveSheet();
-    var selections = activeSheet.getSelections();
-    var style = activeSheet.getDefaultStyle(activeSheet);
-
-    var st = activeSheet.getStyle(0, 0);
-    for (var i = selections.length - 1; i >= 0; i--) {
-      for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
-        for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
-          activeSheet.getCell(y, x).hAlign($.wijmo.wijspread.HorizontalAlign.center);
-        };
-      };
-    };
-  },
-
   'click .btn-bold': function(e) {
     e.preventDefault()
     var spreadjs = $("#grid").wijspread("spread");
