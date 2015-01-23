@@ -391,6 +391,17 @@ Template.spreadsheet.events({
         };
       };
     };
+  },
+
+  'click .btn-span': function(e) {
+    e.preventDefault()
+    var spreadjs = $("#grid").wijspread("spread");
+    var activeSheet = spreadjs.getActiveSheet();
+    var selections = activeSheet.getSelections();
+    
+    for (var i = selections.length - 1; i >= 0; i--) {
+      activeSheet.addSpan(selections[i].row, selections[i].col, selections[i].rowCount, selections[i].colCount);
+    }
   }
 });
 
