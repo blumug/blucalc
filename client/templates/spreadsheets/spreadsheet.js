@@ -407,6 +407,14 @@ Template.spreadsheet.events({
         }
       }
     }
+  },
+
+  'change .rang-zoom': function(e, tmp) {
+    e.preventDefault();
+    var spreadjs = $("#grid").wijspread("spread");
+    var activeSheet = spreadjs.getActiveSheet();
+
+    activeSheet.zoom($(".rang-zoom").val() / 100);    
   }
 });
 

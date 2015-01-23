@@ -7,3 +7,9 @@
 .caret-spread {
 	vertical-align: super;
 }
+
+.rang-zoom {
+	width: 300px;
+	float: right;
+	margin: 4px;
+}
