@@ -85,7 +85,6 @@ Template.spreadsheet.rendered = function() {
       spreadsheetObject = Spreadsheets.findOne();
       activeSheet.setDefaultStyle(activeSheet.getDefaultStyle());
       spreadjs = $("#grid").wijspread("spread");
-      Session.set("spread", spreadjs);
       spreadsheetObject.data = spreadjs.toJSON();
       Meteor.defer(function() {
         Meteor.call('spreadsheetUpdate', spreadsheetObject, function(error, result) {});
