@@ -231,17 +231,8 @@ Template.spreadsheet.events({
     var spreadjs = $("#grid").wijspread("spread");
     var activeSheet = spreadjs.getActiveSheet();
     var selections = activeSheet.getSelections();
-    var style = activeSheet.getDefaultStyle(activeSheet);
 
-    for (var i = selections.length - 1; i >= 0; i--) {
-
-      for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
-        for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
-          activeSheet.getCell(y, x).hAlign($.wijmo.wijspread.HorizontalAlign.left);
-        };
-      };
-
-    };
+    forEachCell(selections, activeSheet, $.wijmo.wijspread.HorizontalAlign.left);
   },
 
   'click .btn-align-right': function(e) {
@@ -249,17 +240,8 @@ Template.spreadsheet.events({
     var spreadjs = $("#grid").wijspread("spread");
     var activeSheet = spreadjs.getActiveSheet();
     var selections = activeSheet.getSelections();
-    var style = activeSheet.getDefaultStyle(activeSheet);
 
-    for (var i = selections.length - 1; i >= 0; i--) {
-
-      for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
-        for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
-          activeSheet.getCell(y, x).hAlign($.wijmo.wijspread.HorizontalAlign.right);
-        };
-      };
-
-    };
+    forEachCell(selections, activeSheet, $.wijmo.wijspread.HorizontalAlign.right);
   },
 
   'click .btn-align-center': function(e) {
@@ -267,18 +249,8 @@ Template.spreadsheet.events({
     var spreadjs = $("#grid").wijspread("spread");
     var activeSheet = spreadjs.getActiveSheet();
     var selections = activeSheet.getSelections();
-    var style = activeSheet.getDefaultStyle(activeSheet);
 
-    var st = activeSheet.getStyle(0, 0);
-    for (var i = selections.length - 1; i >= 0; i--) {
-
-      for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
-        for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
-          activeSheet.getCell(y, x).hAlign($.wijmo.wijspread.HorizontalAlign.center);
-        };
-      };
-
-    };
+    forEachCell(selections, activeSheet, $.wijmo.wijspread.HorizontalAlign.center);
   },
 
   'click .btn-insert-col': function(e) {
@@ -353,6 +325,7 @@ Template.spreadsheet.events({
     var spreadjs = $("#grid").wijspread("spread");
     var activeSheet = spreadjs.getActiveSheet();
     var selections = activeSheet.getSelections();
+    var result = "";
     var style;
     var font;
 
@@ -369,12 +342,16 @@ Template.spreadsheet.events({
             font = "";
           }
 
-          if (font.indexOf("bold") != -1) {
-            font = font.replace("bold", "");
-          } else {
-            font = font.concat(" bold");
+          if (font.indexOf("italic") != -1) {
+            result += " italic";
           }
-          activeSheet.getCell(y, x).font(font);
+
+          if (font.indexOf("bold") == -1) {
+            result += " bold";
+          }
+
+          result += " " + $(".font-size").val() + "px " + $(".font-police").val();
+          activeSheet.getCell(y, x).font(result);
         };
       };
     };
@@ -386,14 +363,43 @@ Template.spreadsheet.events({
     var activeSheet = spreadjs.getActiveSheet();
     var selections = activeSheet.getSelections();
     var style = activeSheet.getDefaultStyle(activeSheet);
+    var result = "";
 
     var st = activeSheet.getStyle(0, 0);
     for (var i = selections.length - 1; i >= 0; i--) {
       for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
         for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
-          activeSheet.getCell(y, x).hAlign($.wijmo.wijspread.HorizontalAlign.center);
+          style = activeSheet.getStyle(y, x);
+          if (style != null) {
+            font = style.font;
+          }
+
+          if (!font && font == undefined) {
+            font = "";
+          }
+
+          if (font.indexOf("bold") != -1) {
+            result += " bold";
+          }
+
+          if (font.indexOf("italic") == -1) {
+            result += " italic";
+          }
+
+          result += " " + $(".font-size").val() + "px " + $(".font-police").val();
+          activeSheet.getCell(y, x).font(result);
         };
       };
     };
   }
 });
+
+var forEachCell = function(selections, activeSheet, arg) {
+  for (var i = selections.length - 1; i >= 0; i--) {
+    for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
+      for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
+        activeSheet.getCell(y, x).hAlign(arg);
+      };
+    };
+  };
+}
