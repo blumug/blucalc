@@ -319,6 +319,80 @@ Template.spreadsheet.events({
     });
   },
 
+  'change .font-size': function (e) {
+    e.preventDefault();
+    var spreadjs = $("#grid").wijspread("spread");
+    var activeSheet = spreadjs.getActiveSheet();
+    var selections = activeSheet.getSelections();
+    var result = "";
+    var style;
+    var font;
+
+    var st = activeSheet.getStyle(0, 0);
+    for (var i = selections.length - 1; i >= 0; i--) {
+      for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
+        for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
+          style = activeSheet.getStyle(y, x);
+          if (style != null) {
+            font = style.font;
+          }
+
+          if (!font && font == undefined) {
+            font = "";
+          }
+
+          if (font.indexOf("italic") != -1) {
+            result += " italic";
+          }
+
+          if (font.indexOf("bold") == -1) {
+            result += " bold";
+          }
+
+          result += " " + $(".font-size").val() + "px " + $(".font-police").val();
+          activeSheet.getCell(y, x).font(result);
+        };
+      };
+    };
+  },
+
+  'change .font-police': function (e) {
+    e.preventDefault();
+    var spreadjs = $("#grid").wijspread("spread");
+    var activeSheet = spreadjs.getActiveSheet();
+    var selections = activeSheet.getSelections();
+    var result = "";
+    var style;
+    var font;
+
+    var st = activeSheet.getStyle(0, 0);
+    for (var i = selections.length - 1; i >= 0; i--) {
+      for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
+        for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
+          style = activeSheet.getStyle(y, x);
+          if (style != null) {
+            font = style.font;
+          }
+
+          if (!font && font == undefined) {
+            font = "";
+          }
+
+          if (font.indexOf("italic") != -1) {
+            result += " italic";
+          }
+
+          if (font.indexOf("bold") == -1) {
+            result += " bold";
+          }
+
+          result += " " + $(".font-size").val() + "px " + $(".font-police").val();
+          activeSheet.getCell(y, x).font(result);
+        };
+      };
+    };    
+  },
+
   'click .btn-bold': function(e) {
     e.preventDefault()
     var spreadjs = $("#grid").wijspread("spread");
