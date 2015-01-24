@@ -1,5 +1,5 @@
 <template name="spreadsheet">
-  <div class="row">
+  <div class="row spread-header-container">
     <div class="col-md-12 spread-header">
       <div class="toolbar">
         <div class="btn-group" role="group" aria-label="...">
@@ -9,17 +9,17 @@
           <input type="color" class="btn-toolbar-spread color-background" value="#FFFFFF" title="Color background" />
           <button type="button" class="btn btn-default btn-foreground-color">F</button>
           <input type="color" class="btn-toolbar-spread color-foreground" value="#FFFFFF" title="Color foreground" />
-          <button type="button" class="btn btn-clear-style" title="Clear style">Clear S</button>
-          <button type="button" class="btn btn-align-left"><i class="fa fa-align-left"></i></button>
-          <button type="button" class="btn btn-align-center"><i class="fa fa-align-justify"></i></button>
-          <button type="button" class="btn btn-align-right"><i class="fa fa-align-right"></i></button>
-          <button type="button" class="btn btn-insert-col">Insert Col</button>
-          <button type="button" class="btn btn-remove-col">Remove Col</button>
-          <button type="button" class="btn btn-insert-row">Insert Row</button>
-          <button type="button" class="btn btn-remove-row">Remove Row</button>
-          <button type="button" class="btn btn-span"><i class="fa fa-th-large"></i></button>
-          <button type="checkbox" class="btn btn-bold"><i class="fa fa-bold"></i></button>
-          <button type="checkbox" class="btn btn-italic"><i class="fa fa-italic"></i></button>
+          <button type="button" class="btn btn-default btn-clear-style" title="Clear style">Clear S</button>
+          <button type="button" class="btn btn-default btn-align-left"><i class="fa fa-align-left"></i></button>
+          <button type="button" class="btn btn-default btn-align-center"><i class="fa fa-align-justify"></i></button>
+          <button type="button" class="btn btn-default btn-align-right"><i class="fa fa-align-right"></i></button>
+          <button type="button" class="btn btn-default btn-insert-col">Insert Col</button>
+          <button type="button" class="btn btn-default btn-remove-col">Remove Col</button>
+          <button type="button" class="btn btn-default btn-insert-row">Insert Row</button>
+          <button type="button" class="btn btn-default btn-remove-row">Remove Row</button>
+          <button type="button" class="btn btn-default btn-span"><i class="fa fa-th-large"></i></button>
+          <button type="checkbox" class="btn btn-default btn-bold"><i class="fa fa-bold"></i></button>
+          <button type="checkbox" class="btn btn-default btn-italic"><i class="fa fa-italic"></i></button>
           <select class="font-size">
             <option value="10">10</option>
             <option value="14">14</option>
@@ -37,8 +37,8 @@
             <option value="Verdana" >Verdana</option>
             <option value="Wingdings" >Wingdings</option>
           </select>
-          <input type="range" min="25" max="400" value="100" step="5" class="rang-zoom" style="width: 300px">
         </div>
+        <input type="range" min="25" max="400" value="100" step="5" class="range-zoom">
       </div>
     </div>
   </div>

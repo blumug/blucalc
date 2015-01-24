@@ -29,9 +29,8 @@ var initWindows = function() {
   var spreadjs;
 
   $.wijmo.wijspread.Culture("en-US");
-
   $("#grid").css({
-    height: window.innerHeight - $(".navbar-jbl42").height() - $(".spread-header").height() - $("#formulaBar").height() - 16,
+    height: $(window).height() - $(".navbar-jbl42").height() - $(".spread-header-container").height() - 32,
     width: '100%'
   }).wijspread({
     sheetCount: 1
@@ -39,7 +38,7 @@ var initWindows = function() {
 
   $(window).resize(function() {
     $("#grid").css({
-      height: window.innerHeight - $(".navbar-jbl42").height() - $(".spread-header").height() - $("#formulaBar").height() - 16,
+      height: $(window).height() - $(".navbar-jbl42").height() - $(".spread-header-container").height() - 32,
       width: '100%'
     });
   });
@@ -409,12 +408,12 @@ Template.spreadsheet.events({
     }
   },
 
-  'change .rang-zoom': function(e, tmp) {
+  'change .range-zoom': function(e, tmp) {
     e.preventDefault();
     var spreadjs = $("#grid").wijspread("spread");
     var activeSheet = spreadjs.getActiveSheet();
 
-    activeSheet.zoom($(".rang-zoom").val() / 100);    
+    activeSheet.zoom($(".range-zoom").val() / 100);    
   }
 });
 
