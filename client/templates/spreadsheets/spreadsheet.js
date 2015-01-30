@@ -487,25 +487,6 @@ Template.spreadsheet.events({
     var activeSheet = spreadjs.getActiveSheet();
 
     activeSheet.zoom($(".range-zoom").val() / 100);
-  },
-
-  'click .btn-export-excel': function(e) {
-    e.preventDefault();
-    var ex = Excel('xls');
-    var workSheet = ex.createWorksheet();
-    var workBook = ex.createWorkbook();
-    var sheet = Spreadsheets.findOne({
-      _id: this.params._id
-    }).data.sheets.Sheet1;
-    for (var y = 0; y < sheet.data.rowCount; y++) {
-      for (var x = 0; x < sheet.data.colCount; x++) {
-        if (sheet.data.dataTable[y][x].value) {
-          workSheet.writeToCell(y, x, sheet.data.dataTable[y][x].value);
-        }
-      }
-    }
-    workBook.addSheet("Sheet1", workSheet);
-    workBook.writeToFile("newSheet.xls");
   }
 });
 
