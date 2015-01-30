@@ -75,7 +75,6 @@ Template.spreadsheet.rendered = function() {
   }
   var activeSheetIndex = spreadjs.getActiveSheetIndex();
   var activeSheet = spreadjs.getActiveSheet();
-
   var monitorCellChange = function() {
     activeSheet = spreadjs.getActiveSheet();
     activeSheet.allowCellOverflow(true);
@@ -319,7 +318,7 @@ Template.spreadsheet.events({
     });
   },
 
-  'change .font-size': function (e) {
+  'change .font-size': function(e) {
     e.preventDefault();
     var spreadjs = $("#grid").wijspread("spread");
     var activeSheet = spreadjs.getActiveSheet();
@@ -356,7 +355,7 @@ Template.spreadsheet.events({
     };
   },
 
-  'change .font-police': function (e) {
+  'change .font-police': function(e) {
     e.preventDefault();
     var spreadjs = $("#grid").wijspread("spread");
     var activeSheet = spreadjs.getActiveSheet();
@@ -390,7 +389,7 @@ Template.spreadsheet.events({
           activeSheet.getCell(y, x).font(result);
         };
       };
-    };    
+    };
   },
 
   'click .btn-bold': function(e) {
@@ -487,7 +486,7 @@ Template.spreadsheet.events({
     var spreadjs = $("#grid").wijspread("spread");
     var activeSheet = spreadjs.getActiveSheet();
 
-    activeSheet.zoom($(".range-zoom").val() / 100);    
+    activeSheet.zoom($(".range-zoom").val() / 100);
   }
 });
 
