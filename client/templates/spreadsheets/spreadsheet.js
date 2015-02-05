@@ -56,6 +56,12 @@ Template.spreadsheet.rendered = function() {
   initKeepAlive();
   initWindows();
 
+  $("#custom-background").spectrum({
+    color: "#f00"
+  });
+  $("#custom-foreground").spectrum({
+    color: "#f00"
+  });
   spreadjs = $("#grid").wijspread("spread");
   if (spreadsheetObject.data) {
     spreadjs.fromJSON(spreadsheetObject.data);
@@ -176,7 +182,7 @@ Template.spreadsheet.events({
 
       for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
         for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
-          activeSheet.getCell(y, x).backColor($(".color-background").val());
+          activeSheet.getCell(y, x).backColor("#" + $("#custom-background").spectrum("get").toHex());
         };
       };
 
@@ -197,7 +203,7 @@ Template.spreadsheet.events({
 
       for (var y = selections[i].row; y <= selections[i].row + selections[i].rowCount - 1; y++) {
         for (var x = selections[i].col; x <= selections[i].col + selections[i].colCount - 1; x++) {
-          activeSheet.getCell(y, x).foreColor($(".color-foreground").val());
+          activeSheet.getCell(y, x).foreColor("#" + $("#custom-foreground").spectrum("get").toHex());
         };
       };
 
@@ -487,6 +493,11 @@ Template.spreadsheet.events({
     var activeSheet = spreadjs.getActiveSheet();
 
     activeSheet.zoom($(".range-zoom").val() / 100);
+  },
+
+  'click .btn-export-pdf': function(e, tmp) {
+    e.preventDefault();
+    Blaze.saveAsPDF(Template.spreadsheet);
   }
 });
 

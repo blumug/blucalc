@@ -51,9 +51,12 @@ mizzao:timesync@0.2.2
 mizzao:user-status@0.6.3
 mobile-status-bar@1.0.2
 mongo@1.0.11
+mrt:bootstrap-colorpicker-2@0.1.1
+natestrauser:bootstrap-colorpicker@0.1.1
 netanelgilad:excel@0.1.0
 npm-bcrypt@0.7.7
 observe-sequence@1.0.4
+ongoworks:pdf@1.1.0
 ordered-dict@1.0.2
 random@1.0.2
 reactive-dict@1.0.5

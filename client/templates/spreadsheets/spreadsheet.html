@@ -1,58 +1,114 @@
 <template name="spreadsheet">
-  <div class="row spread-header-container">
-    <div class="col-md-12 spread-header">
-      <div class="toolbar">
-        <div class="btn-group" role="group" aria-label="...">
-          <button type="button" class="btn btn-default btn-currency">€</button>
-          <button type="button" class="btn btn-default btn-general">General</button>
-          <button type="button" class="btn btn-default btn-background-color">A</button>
+    <div class="row spread-header-container">
+        <div class="col-md-12 spread-header">
+            <div class="toolbar">
+                <ul class="nav nav-tabs btn-group" role="group">
+                    <li>
+                        <button type="button" class="btn btn-default btn-currency">€</button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-default btn-general">General</button>
+                    </li>
+                    <li>
+                        <input type="button" class="btn btn-default btn-background-color" value="Background Color">
+                        <input type="text" id="custom-background">
+                    </li>
+                    <li>
+                        <input type="button" class="btn btn-default btn-foreground-color" value="Foreground Color">
+                        <input type="text" id="custom-foreground">
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-default btn-clear-style" title="Clear style">Clear S</button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-default btn-align-left"><i class="fa fa-align-left"></i>
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-default btn-align-center"><i class="fa fa-align-justify"></i>
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-default btn-align-right"><i class="fa fa-align-right"></i>
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-default btn-insert-col">Insert Col</button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-default btn-remove-col">Remove Col</button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-default btn-insert-row">Insert Row</button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-default btn-remove-row">Remove Row</button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-default btn-span"><i class="fa fa-th-large"></i>
+                        </button>
+                    </li>
+                    <li>
+                        <button type="checkbox" class="btn btn-default btn-bold"><i class="fa fa-bold"></i>
+                        </button>
+                    </li>
+                    <li>
+                        <button type="checkbox" class="btn btn-default btn-italic"><i class="fa fa-italic"></i>
+                        </button>
+
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-default btn-export-excel"><a href="{{pathFor 'excel'}}" target="_blank">Exporter Excel</a>
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-default btn-export-pdf"><a href="">Exporter Pdf</a>
+                        </button>
+                    </li>
+                    <li>
+                        <select class="font-size">
+                            <option value="10">10</option>
+                            <option value="14">14</option>
+                            <option value="18">18</option>
+                            <option value="22">22</option>
+                            <option value="26">26</option>
+                            <option value="30">30</option>
+                        </select>
+                    </li>
+                    <li>
+                        <select class="font-police">
+                            <option value="Arial">Arial</option>
+                            <option value="Courier New">Courier New</option>
+                            <option value="Garamond">Garamond</option>
+                            <option value="Tahoma">Tahoma</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Verdana">Verdana</option>
+                            <option value="Wingdings">Wingdings</option>
+                        </select>
+                    </li>
+                    <li>
+                        <input type="range" min="25" max="400" value="100" step="5" class="range-zoom">
+
+                    </li>
+                </ul>
+                <!--           <button type="button" class="btn btn-default btn-background-color">A</button>
           <input type="color" class="btn-toolbar-spread color-background" value="#FFFFFF" title="Color background" />
           <button type="button" class="btn btn-default btn-foreground-color">F</button>
           <input type="color" class="btn-toolbar-spread color-foreground" value="#FFFFFF" title="Color foreground" />
-          <button type="button" class="btn btn-default btn-clear-style" title="Clear style">Clear S</button>
-          <button type="button" class="btn btn-default btn-align-left"><i class="fa fa-align-left"></i></button>
-          <button type="button" class="btn btn-default btn-align-center"><i class="fa fa-align-justify"></i></button>
-          <button type="button" class="btn btn-default btn-align-right"><i class="fa fa-align-right"></i></button>
-          <button type="button" class="btn btn-default btn-insert-col">Insert Col</button>
-          <button type="button" class="btn btn-default btn-remove-col">Remove Col</button>
-          <button type="button" class="btn btn-default btn-insert-row">Insert Row</button>
-          <button type="button" class="btn btn-default btn-remove-row">Remove Row</button>
-          <button type="button" class="btn btn-default btn-span"><i class="fa fa-th-large"></i></button>
-          <button type="checkbox" class="btn btn-default btn-bold"><i class="fa fa-bold"></i></button>
-          <button type="checkbox" class="btn btn-default btn-italic"><i class="fa fa-italic"></i></button>
-          <button type="button" class="btn btn-default btn-export-excel"><a href="{{pathFor 'excel'}}"  target="_blank">Exporter Excel</a></button>
-          <select class="font-size">
-            <option value="10">10</option>
-            <option value="14">14</option>
-            <option value="18">18</option>
-            <option value="22">22</option>
-            <option value="26">26</option>
-            <option value="30">30</option>
-          </select>
-          <select class="font-police">
-            <option value="Arial" >Arial</option>
-            <option value="Courier New" >Courier New</option>
-            <option value="Garamond" >Garamond</option>
-            <option value="Tahoma" >Tahoma</option>
-            <option value="Times New Roman" >Times New Roman</option>
-            <option value="Verdana" >Verdana</option>
-            <option value="Wingdings" >Wingdings</option>
-          </select>
+ -->
+            </div>
         </div>
-        <input type="range" min="25" max="400" value="100" step="5" class="range-zoom">
-      </div>
     </div>
-  </div>
 
-  <div class="row"> 
-    <div class="col-md-12">
-      <div id="formulaBar" contenteditable="true" spellcheck="false" style="border: 1px solid gray;height: 21px; width: 99%; overflow: hidden; font-size: 13px;font-family: arial,sans-serif;padding: 3px;margin-bottom: 5px;"></div> 
+    <div class="row">
+        <div class="col-md-12">
+            <div id="formulaBar" contenteditable="true" spellcheck="false" style="border: 1px solid gray;height: 21px; width: 99%; overflow: hidden; font-size: 13px;font-family: arial,sans-serif;padding: 3px;margin-bottom: 5px;"></div>
+        </div>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="col-md-12">
-      <div id="grid"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="grid"></div>
+        </div>
     </div>
-  </div>
 </template>
